@@ -11,13 +11,13 @@ class UserSeeder extends Seeder{
     public function run(): void{
         User::create([
            'name'=>'ulo admin',
-           'email'=>'uloadmin@cashiersystem.co.id',
+           'email'=>'uloadmin@cashiersystem.com',
            'password'=>Hash::make('123456'),
            'role'=>'admin',
         ]);
         User::create([
            'name'=>'ulo kasir',
-           'email'=>'ulokasir@cashiersystem.co.id',
+           'email'=>'ulokasir@cashiersystem.com',
            'password'=>Hash::make('123456'),
            'role'=>'kasir',
         ]);
