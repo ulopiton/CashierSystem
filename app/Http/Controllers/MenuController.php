@@ -34,7 +34,7 @@ class MenuController extends Controller{
         $data = $request->all();
 
         if($request->hasFile('image')){
-          $data['image'] = $request->file('image')->store('menus','public')
+          $data['image'] = $request->file('image')->store('menus','public');
         }
 
         Menu::create($data);
