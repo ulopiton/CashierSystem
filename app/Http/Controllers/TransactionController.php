@@ -113,6 +113,7 @@ class TransactionController extends Controller
       ->route("transactions.index")
       ->with("success", "Jumlah menu berhasil diperbarui.");
   }
+
   // Memproses pembayaran
   public function payment(Request $request)
   {
@@ -144,7 +145,12 @@ class TransactionController extends Controller
 
     $change = $payment - $total;
 
-    DB::transaction(function () use ($cart, $total, $payment, $change) {
+    $transaction = DB::transaction(function () use (
+      $cart,
+      $total,
+      $payment,
+      $change
+    ) {
       $invoiceNumber = "INV-" . now()->format("YmdHis");
 
       $transaction = Transaction::create([
@@ -171,14 +177,30 @@ class TransactionController extends Controller
 
         $menu->decrement("stock", $item["quantity"]);
       }
+
+      return $transaction;
     });
 
     $request->session()->forget("cart");
     $request->session()->forget("payment");
 
-    return redirect()
-      ->route("transactions.index")
-      ->with("success", "Transaksi berhasil disimpan.");
+    return redirect()->route("transactions.receipt", $transaction->id);
+  }
+
+  // Buat struk untuk dicetak
+  public function receipt(Transaction $transaction)
+  {
+    $transaction->load("details.menu");
+
+    return view("transactions.receipt", compact("transaction"));
+  }
+
+  // History transaksi
+  public function history()
+  {
+    $transactions = Transaction::latest()->get();
+
+    return view("transactions.history", compact("transactions"));
   }
 
   // Menghapus item dari keranjang

@@ -48,5 +48,13 @@ Route::post("/transactions/payment", [
   TransactionController::class,
   "payment",
 ])->name("transactions.payment");
+Route::get("/transactions/history", [
+  TransactionController::class,
+  "history",
+])->name("transactions.history");
+Route::get("/transactions/{transaction}/receipt", [
+  TransactionController::class,
+  "receipt",
+])->name("transactions.receipt");
 
 //Route::middleware(['auth'])->group(function () {});
