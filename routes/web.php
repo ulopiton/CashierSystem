@@ -8,11 +8,11 @@ use App\Http\Controllers\UserController;
 
 // Redirect halaman utama ke login atau dashboard
 Route::get('/', function () {
-    return redirect()->route('login');
+    return redirect()->route('menus');
 });
 
 // Route yang membutuhkan otentikasi (User harus login)
-Route::middleware(['auth'])->group(function () {
+
     // Dashboard utama
     Route::get('/dashboard', function () {
         return view('dashboard');
@@ -29,4 +29,5 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['can:admin'])->group(function () {
         Route::resource('users', UserController::class);
     });
-});
+
+//Route::middleware(['auth'])->group(function () {});
