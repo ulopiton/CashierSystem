@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\OrderController;
@@ -29,5 +30,9 @@ Route::get('/', function () {
     Route::middleware(['can:admin'])->group(function () {
         Route::resource('users', UserController::class);
     });
+    // 5. ROUTE TRANSAKSI
+    Route::resource('transactions', TransactionController::class)->only([
+    'index',
+    ]);
 
 //Route::middleware(['auth'])->group(function () {});

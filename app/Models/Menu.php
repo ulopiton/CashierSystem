@@ -3,9 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Model;
 
 class Menu extends Model{
     use HasFactory;
@@ -20,8 +20,11 @@ class Menu extends Model{
 
     public function category(): BelongsTo{
       return $this->belongsTo(Category::class);
-      }
+    }
     public function orderDetails(): HasMany{
       return $this->hasMany(OerderDetail::class);
+    }
+    public function transactionDetails(): HasMany{
+      return $this->hasMany(TransactionDetail::class);
     }
 }
