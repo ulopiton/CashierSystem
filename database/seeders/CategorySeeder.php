@@ -9,10 +9,16 @@ use Illuminate\Database\Seeder;
 class CategorySeeder extends Seeder{
     public function run(): void{
         Category::create([
-            'name'=>'Makanan'
+            'name'=>'Appetizer'
         ]);
         Category::create([
-            'name'=>'Minuman'
+            'name'=>'Main Course'
+        ]);
+        Category::create([
+            'name'=>'Dessert'
+        ]);
+        Category::create([
+             'name'=>'Drink'
         ]);
     }
 }

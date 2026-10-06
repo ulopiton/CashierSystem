@@ -9,21 +9,34 @@ use Illuminate\Database\Seeder;
 
 class MenuSeeder extends Seeder{
     public function run(): void{
-      $makanan = Category::where('name','Makanan')->first();
-      $minuman = Category::where('name','Minuman')->first();
-
+      $appetizer = Category::where('name','Appetizer')->first();
+      $maincourse = Category::where('name','Main Course')->first();
+      $dessert = Category::where('name','Dessert')->first();
+      $drink = Category::where('name','Drink')->first();
+      
       Menu::create([
-                   'category_id'=>$makanan->id,
-                   'name'=>'Pudding Cokelat Pak Hambali',
-                   'price'=>25000,
-                   'stock'=>10,
+         'category_id'=>$appetizer->id,
+         'name'=>'Roti Canai',
+         'price'=>10000,
+         'stock'=>10,
       ]);
-
       Menu::create([
-                   'category_id'=>$minuman->id,
-                   'name'=>'Jus Apel Ijo',
-                   'price'=>20000,
-                   'stock'=>10,
+         'category_id'=>$maincourse->id,
+         'name'=>'Nasi Goreng Hong Kong',
+         'price'=>25000,
+         'stock'=>10,
+      ]);
+      Menu::create([
+         'category_id'=>$dessert->id,
+         'name'=>'Es Campur',
+         'price'=>15000,
+         'stock'=>10,
+      ]);
+      Menu::create([
+         'category_id'=>$drink->id,
+         'name'=>'Americano',
+         'price'=>90000,
+         'stock'=>10,
       ]);
     }
 }
