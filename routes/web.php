@@ -52,6 +52,10 @@ Route::get("/transactions/history", [
   TransactionController::class,
   "history",
 ])->name("transactions.history");
+Route::get("/transactions/{transaction}/detail", [
+  TransactionController::class,
+  "show",
+])->name("transactions.detail");
 Route::get("/transactions/{transaction}/receipt", [
   TransactionController::class,
   "receipt",

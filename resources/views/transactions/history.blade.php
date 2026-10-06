@@ -96,6 +96,10 @@
             }
 
         }
+      .btn-detail {
+          background: #17a2b8;
+          color: white;
+        }
 
     </style>
 
@@ -180,7 +184,11 @@
                             </td>
 
                             <td>
-
+                                <a
+                                    href="{{ route('transactions.detail', $transaction->id) }}"
+                                    class="btn btn-detail"
+                                >
+                                    Detail
                                 <a
                                     href="{{ route('transactions.receipt', $transaction->id) }}"
                                     class="btn btn-receipt"

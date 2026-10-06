@@ -222,4 +222,11 @@ class TransactionController extends Controller
       ->route("transactions.index")
       ->with("success", "Menu berhasil dihapus dari keranjang.");
   }
+
+  public function show(Transaction $transaction)
+  {
+    $transaction->load("details.menu");
+
+    return view("transactions.show", compact("transaction"));
+  }
 }
