@@ -100,6 +100,63 @@
           background: #17a2b8;
           color: white;
         }
+      .filter-container {
+          background: white;
+          padding: 20px;
+          border-radius: 10px;
+          margin-bottom: 20px;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+      
+      .filter-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr 1fr auto;
+          gap: 15px;
+          align-items: end;
+      }
+      
+      .filter-group {
+          display: flex;
+          flex-direction: column;
+      }
+      
+      .filter-group label {
+          margin-bottom: 6px;
+          font-weight: bold;
+      }
+      
+      .filter-group input {
+          padding: 10px;
+          border: 1px solid #ccc;
+          border-radius: 6px;
+          font-size: 14px;
+      }
+      
+      .filter-actions {
+          display: flex;
+          gap: 8px;
+      }
+      
+      .btn-search {
+          background: #007bff;
+          color: white;
+      }
+      
+      .btn-reset {
+          background: #6c757d;
+          color: white;
+      }
+      
+      @media (max-width: 800px) {
+      
+        .filter-grid {
+            grid-template-columns: 1fr;
+        }
+  
+        .filter-actions {
+            margin-top: 5px;
+        }
+      }
 
     </style>
 
@@ -113,15 +170,97 @@
 
     <div class="top-bar">
 
-        <a
-            href="{{ route('transactions.index') }}"
-            class="btn btn-cashier"
-        >
-            Kembali ke Kasir
-        </a>
+    <a
+        href="{{ route('transactions.index') }}"
+        class="btn btn-cashier"
+    >
+        Kembali ke Kasir
+    </a>
 
-    </div>
+</div>
 
+
+<div class="filter-container">
+
+    <form
+        action="{{ route('transactions.history') }}"
+        method="GET"
+    >
+
+        <div class="filter-grid">
+
+            <div class="filter-group">
+
+                <label for="invoice">
+                    Invoice
+                </label>
+
+                <input
+                    type="text"
+                    id="invoice"
+                    name="invoice"
+                    value="{{ request('invoice') }}"
+                    placeholder="Cari nomor invoice"
+                >
+
+            </div>
+
+
+            <div class="filter-group">
+
+                <label for="date_from">
+                    Dari Tanggal
+                </label>
+
+                <input
+                    type="date"
+                    id="date_from"
+                    name="date_from"
+                    value="{{ request('date_from') }}"
+                >
+
+            </div>
+
+
+            <div class="filter-group">
+
+                <label for="date_to">
+                    Sampai Tanggal
+                </label>
+
+                <input
+                    type="date"
+                    id="date_to"
+                    name="date_to"
+                    value="{{ request('date_to') }}"
+                >
+
+            </div>
+
+
+            <div class="filter-actions">
+
+                <button
+                    type="submit"
+                    class="btn btn-search"
+                >
+                    Cari
+                </button>
+
+                <a
+                    href="{{ route('transactions.history') }}"
+                    class="btn btn-reset"
+                >
+                    Reset
+                </a>
+
+            </div>
+
+        </div>
+
+    </form>
+
+</div>
     <div class="table-container">
 
         @if ($transactions->count() > 0)
@@ -189,6 +328,7 @@
                                     class="btn btn-detail"
                                 >
                                     Detail
+                                  
                                 <a
                                     href="{{ route('transactions.receipt', $transaction->id) }}"
                                     class="btn btn-receipt"

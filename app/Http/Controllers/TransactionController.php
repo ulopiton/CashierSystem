@@ -196,9 +196,23 @@ class TransactionController extends Controller
   }
 
   // History transaksi
-  public function history()
+  public function history(Request $request)
   {
-    $transactions = Transaction::latest()->get();
+    $query = Transaction::query();
+
+    if ($request->filled("invoice")) {
+      $query->where("invoice_number", "like", "%" . $request->invoice . "%");
+    }
+
+    if ($request->filled("date_from")) {
+      $query->whereDate("created_at", ">=", $request->date_from);
+    }
+
+    if ($request->filled("date_to")) {
+      $query->whereDate("created_at", "<=", $request->date_to);
+    }
+
+    $transactions = $query->latest()->get();
 
     return view("transactions.history", compact("transactions"));
   }

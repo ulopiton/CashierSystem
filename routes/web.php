@@ -9,7 +9,7 @@ use App\Http\Controllers\UserController;
 
 // Redirect halaman utama ke login atau dashboard
 Route::get("/", function () {
-  return redirect()->route("menus");
+  return redirect()->route("login");
 });
 
 // Route yang membutuhkan otentikasi (User harus login)
