@@ -12,264 +12,114 @@
 
     <title>Riwayat Transaksi</title>
 
-    <style>
-
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background: #f5f5f5;
-        }
-
-        .container {
-            max-width: 1100px;
-            margin: auto;
-        }
-
-        h1 {
-            margin-bottom: 20px;
-        }
-
-        .top-bar {
-            margin-bottom: 20px;
-        }
-
-        .btn {
-            display: inline-block;
-            padding: 9px 14px;
-            border-radius: 6px;
-            text-decoration: none;
-            border: none;
-            cursor: pointer;
-        }
-
-        .btn-cashier {
-            background: #007bff;
-            color: white;
-        }
-
-        .table-container {
-            background: white;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            overflow-x: auto;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        th,
-        td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-
-        th {
-            background: #f1f1f1;
-        }
-
-        .text-right {
-            text-align: right;
-        }
-
-        .btn-receipt {
-            background: #28a745;
-            color: white;
-        }
-
-        .empty {
-            text-align: center;
-            padding: 30px;
-            color: #666;
-        }
-
-        @media (max-width: 700px) {
-
-            th,
-            td {
-                font-size: 14px;
-                padding: 8px;
-            }
-
-        }
-      
-      .btn-detail {
-          background: #17a2b8;
-          color: white;
-        }
-      
-      .filter-container {
-          background: white;
-          padding: 20px;
-          border-radius: 10px;
-          margin-bottom: 20px;
-          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-      }
-      
-      .filter-grid {
-          display: grid;
-          grid-template-columns: 1fr 1fr 1fr auto;
-          gap: 15px;
-          align-items: end;
-      }
-      
-      .filter-group {
-          display: flex;
-          flex-direction: column;
-      }
-      
-      .filter-group label {
-          margin-bottom: 6px;
-          font-weight: bold;
-      }
-      
-      .filter-group input {
-          padding: 10px;
-          border: 1px solid #ccc;
-          border-radius: 6px;
-          font-size: 14px;
-      }
-      
-      .filter-actions {
-          display: flex;
-          gap: 8px;
-      }
-      
-      .btn-search {
-          background: #007bff;
-          color: white;
-      }
-      
-      .btn-reset {
-          background: #6c757d;
-          color: white;
-      }
-      
-      @media (max-width: 800px) {
-      
-        .filter-grid {
-            grid-template-columns: 1fr;
-        }
-  
-        .filter-actions {
-            margin-top: 5px;
-        }
-      }
-
-    </style>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 
 </head>
 
-<body>
+<body class="transaction-history-page">
 
-<div class="container">
+<div class="transaction-history-container">
 
     <h1>Riwayat Transaksi</h1>
 
     <div class="top-bar">
 
-    <a
-        href="{{ route('transactions.index') }}"
-        class="btn btn-cashier"
-    >
-        Kembali ke Kasir
-    </a>
+        <a
+            href="{{ route('transactions.index') }}"
+            class="btn btn-cashier"
+        >
+            Kembali ke Kasir
+        </a>
 
-</div>
+    </div>
 
+    <div class="filter-container">
 
-<div class="filter-container">
+        <form
+            action="{{ route('transactions.history') }}"
+            method="GET"
+        >
 
-    <form
-        action="{{ route('transactions.history') }}"
-        method="GET"
-    >
+            <div class="filter-grid">
 
-        <div class="filter-grid">
+                <div class="filter-group">
 
-            <div class="filter-group">
+                    <label for="invoice">
+                        Invoice
+                    </label>
 
-                <label for="invoice">
-                    Invoice
-                </label>
+                    <input
+                        type="text"
+                        id="invoice"
+                        name="invoice"
+                        value="{{ request('invoice') }}"
+                        placeholder="Cari nomor invoice"
+                    >
 
-                <input
-                    type="text"
-                    id="invoice"
-                    name="invoice"
-                    value="{{ request('invoice') }}"
-                    placeholder="Cari nomor invoice"
-                >
+                </div>
 
-            </div>
+                <div class="filter-group">
 
+                    <label for="date_from">
+                        Dari Tanggal
+                    </label>
 
-            <div class="filter-group">
+                    <input
+                        type="date"
+                        id="date_from"
+                        name="date_from"
+                        value="{{ request('date_from') }}"
+                    >
 
-                <label for="date_from">
-                    Dari Tanggal
-                </label>
+                </div>
 
-                <input
-                    type="date"
-                    id="date_from"
-                    name="date_from"
-                    value="{{ request('date_from') }}"
-                >
+                <div class="filter-group">
 
-            </div>
+                    <label for="date_to">
+                        Sampai Tanggal
+                    </label>
 
+                    <input
+                        type="date"
+                        id="date_to"
+                        name="date_to"
+                        value="{{ request('date_to') }}"
+                    >
 
-            <div class="filter-group">
+                </div>
 
-                <label for="date_to">
-                    Sampai Tanggal
-                </label>
+                <div class="filter-actions">
 
-                <input
-                    type="date"
-                    id="date_to"
-                    name="date_to"
-                    value="{{ request('date_to') }}"
-                >
+                    <button
+                        type="submit"
+                        class="btn btn-search"
+                    >
+                        Cari
+                    </button>
 
-            </div>
+                    <a
+                        href="{{ route('transactions.history') }}"
+                        class="btn btn-reset"
+                    >
+                        Reset
+                    </a>
 
-
-            <div class="filter-actions">
-
-                <button
-                    type="submit"
-                    class="btn btn-search"
-                >
-                    Cari
-                </button>
-
-                <a
-                    href="{{ route('transactions.history') }}"
-                    class="btn btn-reset"
-                >
-                    Reset
-                </a>
+                </div>
 
             </div>
 
-        </div>
+        </form>
 
-    </form>
+    </div>
 
-</div>
+    <div class="transaction-count">
 
-<div style="margin-bottom: 15px;">
-    Menampilkan
-    <strong>{{ $transactions->count() }}</strong>
-    transaksi.
-</div>
-  
+        Menampilkan
+        <strong>{{ $transactions->count() }}</strong>
+        transaksi.
+
+    </div>
+
     <div class="table-container">
 
         @if ($transactions->count() > 0)
@@ -332,12 +182,14 @@
                             </td>
 
                             <td>
+
                                 <a
                                     href="{{ route('transactions.detail', $transaction->id) }}"
                                     class="btn btn-detail"
                                 >
                                     Detail
-                                  
+                                </a>
+
                                 <a
                                     href="{{ route('transactions.receipt', $transaction->id) }}"
                                     class="btn btn-receipt"
@@ -358,9 +210,7 @@
         @else
 
             <div class="empty">
-
                 Belum ada transaksi.
-
             </div>
 
         @endif

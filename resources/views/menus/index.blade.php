@@ -12,120 +12,13 @@
 
     <title>Daftar Menu</title>
 
-    <style>
-
-        body {
-            font-family: Arial, sans-serif;
-            margin: 40px;
-            background-color: #f5f5f5;
-        }
-
-        .container {
-            max-width: 1100px;
-            margin: auto;
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-        }
-
-        h1 {
-            margin-bottom: 20px;
-        }
-
-        .btn {
-            display: inline-block;
-            padding: 8px 14px;
-            text-decoration: none;
-            border-radius: 5px;
-            border: none;
-            cursor: pointer;
-            font-size: 14px;
-        }
-
-        .btn-primary {
-            background-color: #2563eb;
-            color: white;
-        }
-
-        .btn-warning {
-            background-color: #f59e0b;
-            color: white;
-        }
-
-        .btn-danger {
-            background-color: #dc2626;
-            color: white;
-        }
-
-        .btn-secondary {
-            background-color: #6b7280;
-            color: white;
-        }
-
-        .alert {
-            padding: 12px;
-            margin-bottom: 20px;
-            border-radius: 5px;
-        }
-
-        .alert-success {
-            background-color: #dcfce7;
-            color: #166534;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-
-        th,
-        td {
-            border: 1px solid #ddd;
-            padding: 12px;
-            text-align: left;
-            vertical-align: middle;
-        }
-
-        th {
-            background-color: #f3f4f6;
-        }
-
-        .menu-image {
-            width: 80px;
-            height: 60px;
-            object-fit: cover;
-            border-radius: 5px;
-        }
-
-        .no-image {
-            width: 80px;
-            height: 60px;
-            background: #e5e7eb;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            color: #6b7280;
-            border-radius: 5px;
-        }
-
-        .actions {
-            display: flex;
-            gap: 5px;
-        }
-
-        .actions form {
-            display: inline;
-        }
-
-    </style>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 
 </head>
 
-<body>
+<body class="menu-index-page">
 
-<div class="container">
+<div class="menu-index-container">
 
     <h1>Daftar Menu</h1>
 
@@ -255,7 +148,7 @@
 
                     <td
                         colspan="7"
-                        style="text-align: center;"
+                        class="text-center"
                     >
                         Belum ada menu.
                     </td>

@@ -12,73 +12,13 @@
 
     <title>Tambah Menu</title>
 
-    <style>
-
-        body {
-            font-family: Arial, sans-serif;
-            margin: 40px;
-            background-color: #f5f5f5;
-        }
-
-        .container {
-            max-width: 650px;
-            margin: auto;
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-        }
-
-        input,
-        select {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            box-sizing: border-box;
-        }
-
-        .btn {
-            padding: 10px 15px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .btn-primary {
-            background-color: #2563eb;
-            color: white;
-        }
-
-        .btn-secondary {
-            background-color: #6b7280;
-            color: white;
-        }
-
-        .error {
-            color: #dc2626;
-            font-size: 14px;
-            margin-top: 5px;
-        }
-
-    </style>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 
 </head>
+  
+<body class="menu-create-page">
 
-<body>
-
-<div class="container">
+<div class="menu-create-container">
 
     <h1>Tambah Menu</h1>
 
