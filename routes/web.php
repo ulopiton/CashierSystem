@@ -6,17 +6,36 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\UserController;
+use App\Models\Menu;
+use App\Models\Transaction;
 
 // Redirect halaman utama ke login atau dashboard
 Route::get("/", function () {
-  return redirect()->route("login");
+	return redirect()->route("login");
 });
 
 // Route yang membutuhkan otentikasi (User harus login)
 
 // Dashboard utama
 Route::get("/dashboard", function () {
-  return view("dashboard");
+	$today = now()->toDateString();
+
+	$todaySales = Transaction::whereDate("created_at", $today)->sum(
+		"total_amount"
+	);
+
+	$todayTransactions = Transaction::whereDate("created_at", $today)->count();
+
+	$totalMenus = Menu::count();
+
+	$lowStockMenus = Menu::where("stock", "<=", 5)
+		->orderBy("stock")
+		->get();
+
+	return view(
+		"dashboard.index",
+		compact("todaySales", "todayTransactions", "totalMenus", "lowStockMenus")
+	);
 })->name("dashboard");
 // 1. ROUTE KATEGORI (Category)
 Route::resource("categories", CategoryController::class);
@@ -28,37 +47,37 @@ Route::resource("orders", OrderController::class)->except(["edit", "update"]);
 // 4. ROUTE MANAJEMEN USER (User)
 // Biasanya dibatasi hanya untuk role 'admin'
 Route::middleware(["can:admin"])->group(function () {
-  Route::resource("users", UserController::class);
+	Route::resource("users", UserController::class);
 });
 // 5. ROUTE TRANSAKSI
 Route::resource("transactions", TransactionController::class)->only(["index"]);
 Route::post("/transactions/cart/add", [
-  TransactionController::class,
-  "addToCart",
+	TransactionController::class,
+	"addToCart",
 ])->name("transactions.cart.add");
 Route::post("/transactions/cart/update", [
-  TransactionController::class,
-  "updateCart",
+	TransactionController::class,
+	"updateCart",
 ])->name("transactions.cart.update");
 Route::post("/transactions/cart/remove", [
-  TransactionController::class,
-  "removeFromCart",
+	TransactionController::class,
+	"removeFromCart",
 ])->name("transactions.cart.remove");
 Route::post("/transactions/payment", [
-  TransactionController::class,
-  "payment",
+	TransactionController::class,
+	"payment",
 ])->name("transactions.payment");
 Route::get("/transactions/history", [
-  TransactionController::class,
-  "history",
+	TransactionController::class,
+	"history",
 ])->name("transactions.history");
 Route::get("/transactions/{transaction}/detail", [
-  TransactionController::class,
-  "show",
+	TransactionController::class,
+	"show",
 ])->name("transactions.detail");
 Route::get("/transactions/{transaction}/receipt", [
-  TransactionController::class,
-  "receipt",
+	TransactionController::class,
+	"receipt",
 ])->name("transactions.receipt");
 
 //Route::middleware(['auth'])->group(function () {});

@@ -96,10 +96,12 @@
             }
 
         }
+      
       .btn-detail {
           background: #17a2b8;
           color: white;
         }
+      
       .filter-container {
           background: white;
           padding: 20px;
@@ -261,6 +263,13 @@
     </form>
 
 </div>
+
+<div style="margin-bottom: 15px;">
+    Menampilkan
+    <strong>{{ $transactions->count() }}</strong>
+    transaksi.
+</div>
+  
     <div class="table-container">
 
         @if ($transactions->count() > 0)
