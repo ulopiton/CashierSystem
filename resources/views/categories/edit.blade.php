@@ -1,78 +1,66 @@
-<!DOCTYPE html>
-<html lang="id">
+@extends('layouts.app')
 
-<head>
+@section('title', 'Edit Kategori')
 
-    <meta charset="UTF-8">
+@section('content')
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <div class="category-edit-page">
 
-    <title>Edit Kategori</title>
+        <div class="category-edit-container">
 
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+            <h1>Edit Kategori</h1>
 
-</head>
-  
-<body class="category-edit-page">
-
-<div class="category-edit-container">
-
-    <h1>Edit Kategori</h1>
-
-    <form
-        action="{{ route('categories.update', $category->id) }}"
-        method="POST"
-    >
-
-        @csrf
-
-        @method('PUT')
-
-        <div class="form-group">
-
-            <label for="name">
-                Nama Kategori
-            </label>
-
-            <input
-                type="text"
-                id="name"
-                name="name"
-                value="{{ old('name', $category->name) }}"
-                placeholder="Contoh: Makanan"
+            <form
+                action="{{ route('categories.update', $category->id) }}"
+                method="POST"
             >
 
-            @error('name')
+                @csrf
 
-                <div class="error">
-                    {{ $message }}
+                @method('PUT')
+
+                <div class="form-group">
+
+                    <label for="name">
+                        Nama Kategori
+                    </label>
+
+                    <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        value="{{ old('name', $category->name) }}"
+                        placeholder="Contoh: Makanan"
+                    >
+
+                    @error('name')
+
+                        <div class="error">
+                            {{ $message }}
+                        </div>
+
+                    @enderror
+
                 </div>
 
-            @enderror
+                <a
+                    href="{{ route('categories.index') }}"
+                    class="btn btn-secondary"
+                >
+                    Kembali
+                </a>
+
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                >
+                    Update
+                </button>
+
+            </form>
 
         </div>
 
-        <a
-            href="{{ route('categories.index') }}"
-            class="btn btn-secondary"
-        >
-            Kembali
-        </a>
+    </div>
 
-        <button
-            type="submit"
-            class="btn btn-primary"
-        >
-            Update
-        </button>
-
-    </form>
-
-</div>
-
-</body>
-
-</html>
+@endsection

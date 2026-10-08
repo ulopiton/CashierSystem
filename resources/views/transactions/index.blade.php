@@ -1,16 +1,10 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+@extends('layouts.app')
 
-    <title>Kasir</title>
+@section('title', 'Kasir')
 
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-</head>
-<body>
+@section('content')
 
-    <h1>Kasir</h1>
+<div class="transaction-page">
 
     {{-- Pesan berhasil --}}
     @if (session('success'))
@@ -26,92 +20,115 @@
         </div>
     @endif
 
+
+    {{-- ========================= --}}
+    {{-- LAYOUT UTAMA --}}
+    {{-- ========================= --}}
+
     <div class="layout">
+
+
+        {{-- ========================= --}}
+        {{-- JUDUL DAFTAR MENU --}}
+        {{-- ========================= --}}
+
+        <h2 class="menu-title">
+            Daftar Menu
+        </h2>
+
 
         {{-- ========================= --}}
         {{-- DAFTAR MENU --}}
         {{-- ========================= --}}
 
-        <div>
+        <div class="menu-container">
 
-            <h2>Daftar Menu</h2>
+            @forelse ($menus as $menu)
 
-            <div class="menu-container">
+                <div class="menu-card">
 
-                @forelse ($menus as $menu)
+                    {{-- Foto Menu --}}
+                    @if ($menu->image)
 
-                    <div class="menu-card">
-
-                        @if ($menu->image)
-                            <img
-                                src="{{ asset($menu->image) }}"
-                                alt="{{ $menu->name }}"
-                                class="menu-image"
-                            >
-                        @else
-                            <div class="no-image">
-                                Tidak ada foto
-                            </div>
-                        @endif
-
-                        <div class="menu-name">
-                            {{ $menu->name }}
-                        </div>
-
-                        <div class="menu-category">
-                            {{ $menu->category->name }}
-                        </div>
-
-                        <div class="menu-price">
-                            Rp {{ number_format($menu->price, 0, ',', '.') }}
-                        </div>
-
-                        <div class="menu-stock">
-                            Stok: {{ $menu->stock }}
-                        </div>
-
-                        {{-- Form Tambah --}}
-                        <form
-                            action="{{ route('transactions.cart.add') }}"
-                            method="POST"
-                            class="add-form"
+                        <img
+                            src="{{ asset($menu->image) }}"
+                            alt="{{ $menu->name }}"
+                            class="menu-image"
                         >
 
-                            @csrf
+                    @else
 
-                            <input
-                                type="number"
-                                name="quantity"
-                                value="1"
-                                min="1"
-                                max="{{ $menu->stock }}"
-                                class="quantity-input"
-                            >
+                        <div class="no-image">
+                            Tidak ada foto
+                        </div>
 
-                            <input
-                                type="hidden"
-                                name="menu_id"
-                                value="{{ $menu->id }}"
-                            >
+                    @endif
 
-                            <button
-                                type="submit"
-                                class="btn btn-add"
-                            >
-                                Tambah
-                            </button>
 
-                        </form>
-
+                    {{-- Nama Menu --}}
+                    <div class="menu-name">
+                        {{ $menu->name }}
                     </div>
 
-                @empty
 
-                    <p>Tidak ada menu yang tersedia.</p>
+                    {{-- Kategori --}}
+                    <div class="menu-category">
+                        {{ $menu->category->name }}
+                    </div>
 
-                @endforelse
 
-            </div>
+                    {{-- Harga --}}
+                    <div class="menu-price">
+                        Rp {{ number_format($menu->price, 0, ',', '.') }}
+                    </div>
+
+
+                    {{-- Stok --}}
+                    <div class="menu-stock">
+                        Stok: {{ $menu->stock }}
+                    </div>
+
+
+                    {{-- Form Tambah ke Keranjang --}}
+                    <form
+                        action="{{ route('transactions.cart.add') }}"
+                        method="POST"
+                        class="add-form"
+                    >
+
+                        @csrf
+
+                        <input
+                            type="number"
+                            name="quantity"
+                            value="1"
+                            min="1"
+                            max="{{ $menu->stock }}"
+                            class="quantity-input"
+                        >
+
+                        <input
+                            type="hidden"
+                            name="menu_id"
+                            value="{{ $menu->id }}"
+                        >
+
+                        <button
+                            type="submit"
+                            class="btn btn-add"
+                        >
+                            Tambah
+                        </button>
+
+                    </form>
+
+                </div>
+
+            @empty
+
+                <p>Tidak ada menu yang tersedia.</p>
+
+            @endforelse
 
         </div>
 
@@ -130,29 +147,44 @@
                     $total = 0;
                 @endphp
 
+
+                {{-- ========================= --}}
+                {{-- ITEM KERANJANG --}}
+                {{-- ========================= --}}
+
                 @foreach ($cart as $item)
 
                     @php
                         $total += $item['subtotal'];
                     @endphp
 
+
                     <div class="cart-item">
 
+                        {{-- Nama --}}
                         <div class="cart-name">
                             {{ $item['name'] }}
                         </div>
 
+
+                        {{-- Harga × Quantity --}}
                         <div class="cart-detail">
                             Rp {{ number_format($item['price'], 0, ',', '.') }}
                             ×
                             {{ $item['quantity'] }}
                         </div>
 
+
+                        {{-- Subtotal --}}
                         <div class="cart-subtotal">
                             Rp {{ number_format($item['subtotal'], 0, ',', '.') }}
                         </div>
 
-                        {{-- Update quantity --}}
+
+                        {{-- ========================= --}}
+                        {{-- UPDATE QUANTITY --}}
+                        {{-- ========================= --}}
+
                         <form
                             action="{{ route('transactions.cart.update') }}"
                             method="POST"
@@ -167,6 +199,7 @@
                                 value="{{ $item['menu_id'] }}"
                             >
 
+                            {{-- Kurangi --}}
                             <button
                                 type="submit"
                                 name="quantity"
@@ -177,10 +210,14 @@
                                 −
                             </button>
 
+
+                            {{-- Quantity --}}
                             <span class="cart-quantity">
                                 {{ $item['quantity'] }}
                             </span>
 
+
+                            {{-- Tambah --}}
                             <button
                                 type="submit"
                                 name="quantity"
@@ -192,7 +229,11 @@
 
                         </form>
 
-                        {{-- Hapus item --}}
+
+                        {{-- ========================= --}}
+                        {{-- HAPUS ITEM --}}
+                        {{-- ========================= --}}
+
                         <form
                             action="{{ route('transactions.cart.remove') }}"
                             method="POST"
@@ -226,8 +267,10 @@
                 {{-- ========================= --}}
 
                 <div class="cart-total">
+
                     Total:
                     Rp {{ number_format($total, 0, ',', '.') }}
+
                 </div>
 
 
@@ -239,7 +282,9 @@
 
                     <div class="payment-result">
 
-                        <strong>Pembayaran Berhasil</strong>
+                        <strong>
+                            Pembayaran Berhasil
+                        </strong>
 
                         <p>
                             Total:
@@ -267,7 +312,9 @@
 
                 <div class="payment-section">
 
-                    <h3>Pembayaran</h3>
+                    <h3>
+                        Pembayaran
+                    </h3>
 
                     <form
                         action="{{ route('transactions.payment') }}"
@@ -304,7 +351,9 @@
 
             @else
 
-                <p>Keranjang masih kosong.</p>
+                <p>
+                    Keranjang masih kosong.
+                </p>
 
             @endif
 
@@ -312,5 +361,6 @@
 
     </div>
 
-</body>
-</html>
+</div>
+
+@endsection

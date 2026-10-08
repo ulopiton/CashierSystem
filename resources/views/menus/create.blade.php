@@ -1,191 +1,179 @@
-<!DOCTYPE html>
-<html lang="id">
+@extends('layouts.app')
 
-<head>
+@section('title', 'Tambah Menu')
 
-    <meta charset="UTF-8">
+@section('content')
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <div class="menu-create-page">
 
-    <title>Tambah Menu</title>
+        <div class="menu-create-container">
 
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+            <h1>Tambah Menu</h1>
 
-</head>
-  
-<body class="menu-create-page">
-
-<div class="menu-create-container">
-
-    <h1>Tambah Menu</h1>
-
-    <form
-        action="{{ route('menus.store') }}"
-        method="POST"
-        enctype="multipart/form-data"
-    >
-
-        @csrf
-
-        <div class="form-group">
-
-            <label for="category_id">
-                Kategori
-            </label>
-
-            <select
-                name="category_id"
-                id="category_id"
+            <form
+                action="{{ route('menus.store') }}"
+                method="POST"
+                enctype="multipart/form-data"
             >
 
-                <option value="">
-                    -- Pilih Kategori --
-                </option>
+                @csrf
 
-                @foreach ($categories as $category)
+                <div class="form-group">
 
-                    <option
-                        value="{{ $category->id }}"
-                        {{ old('category_id') == $category->id ? 'selected' : '' }}
+                    <label for="category_id">
+                        Kategori
+                    </label>
+
+                    <select
+                        name="category_id"
+                        id="category_id"
                     >
-                        {{ $category->name }}
-                    </option>
 
-                @endforeach
+                        <option value="">
+                            -- Pilih Kategori --
+                        </option>
 
-            </select>
+                        @foreach ($categories as $category)
 
-            @error('category_id')
+                            <option
+                                value="{{ $category->id }}"
+                                {{ old('category_id') == $category->id ? 'selected' : '' }}
+                            >
+                                {{ $category->name }}
+                            </option>
 
-                <div class="error">
-                    {{ $message }}
+                        @endforeach
+
+                    </select>
+
+                    @error('category_id')
+
+                        <div class="error">
+                            {{ $message }}
+                        </div>
+
+                    @enderror
+
                 </div>
 
-            @enderror
+                <div class="form-group">
+
+                    <label for="name">
+                        Nama Menu
+                    </label>
+
+                    <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        value="{{ old('name') }}"
+                        placeholder="Contoh: Nasi Goreng"
+                    >
+
+                    @error('name')
+
+                        <div class="error">
+                            {{ $message }}
+                        </div>
+
+                    @enderror
+
+                </div>
+
+                <div class="form-group">
+
+                    <label for="price">
+                        Harga
+                    </label>
+
+                    <input
+                        type="number"
+                        id="price"
+                        name="price"
+                        value="{{ old('price') }}"
+                        min="0"
+                        placeholder="Contoh: 15000"
+                    >
+
+                    @error('price')
+
+                        <div class="error">
+                            {{ $message }}
+                        </div>
+
+                    @enderror
+
+                </div>
+
+                <div class="form-group">
+
+                    <label for="stock">
+                        Stok
+                    </label>
+
+                    <input
+                        type="number"
+                        id="stock"
+                        name="stock"
+                        value="{{ old('stock', 0) }}"
+                        min="0"
+                    >
+
+                    @error('stock')
+
+                        <div class="error">
+                            {{ $message }}
+                        </div>
+
+                    @enderror
+
+                </div>
+
+                <div class="form-group">
+
+                    <label for="image">
+                        Foto Menu
+                    </label>
+
+                    <input
+                        type="file"
+                        id="image"
+                        name="image"
+                        accept=".jpg,.jpeg,.png,.webp"
+                    >
+
+                    <small>
+                        Format: JPG, JPEG, PNG, WEBP. Maksimal 2 MB.
+                    </small>
+
+                    @error('image')
+
+                        <div class="error">
+                            {{ $message }}
+                        </div>
+
+                    @enderror
+
+                </div>
+
+                <a
+                    href="{{ route('menus.index') }}"
+                    class="btn btn-secondary"
+                >
+                    Kembali
+                </a>
+
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                >
+                    Simpan
+                </button>
+
+            </form>
 
         </div>
 
-        <div class="form-group">
+    </div>
 
-            <label for="name">
-                Nama Menu
-            </label>
-
-            <input
-                type="text"
-                id="name"
-                name="name"
-                value="{{ old('name') }}"
-                placeholder="Contoh: Nasi Goreng"
-            >
-
-            @error('name')
-
-                <div class="error">
-                    {{ $message }}
-                </div>
-
-            @enderror
-
-        </div>
-
-        <div class="form-group">
-
-            <label for="price">
-                Harga
-            </label>
-
-            <input
-                type="number"
-                id="price"
-                name="price"
-                value="{{ old('price') }}"
-                min="0"
-                placeholder="Contoh: 15000"
-            >
-
-            @error('price')
-
-                <div class="error">
-                    {{ $message }}
-                </div>
-
-            @enderror
-
-        </div>
-
-        <div class="form-group">
-
-            <label for="stock">
-                Stok
-            </label>
-
-            <input
-                type="number"
-                id="stock"
-                name="stock"
-                value="{{ old('stock', 0) }}"
-                min="0"
-            >
-
-            @error('stock')
-
-                <div class="error">
-                    {{ $message }}
-                </div>
-
-            @enderror
-
-        </div>
-
-        <div class="form-group">
-
-            <label for="image">
-                Foto Menu
-            </label>
-
-            <input
-                type="file"
-                id="image"
-                name="image"
-                accept=".jpg,.jpeg,.png,.webp"
-            >
-
-            <small>
-                Format: JPG, JPEG, PNG, WEBP. Maksimal 2 MB.
-            </small>
-
-            @error('image')
-
-                <div class="error">
-                    {{ $message }}
-                </div>
-
-            @enderror
-
-        </div>
-
-        <a
-            href="{{ route('menus.index') }}"
-            class="btn btn-secondary"
-        >
-            Kembali
-        </a>
-
-        <button
-            type="submit"
-            class="btn btn-primary"
-        >
-            Simpan
-        </button>
-
-    </form>
-
-</div>
-
-</body>
-
-</html>
+@endsection

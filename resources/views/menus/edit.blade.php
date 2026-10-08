@@ -1,217 +1,205 @@
-<!DOCTYPE html>
-<html lang="id">
+@extends('layouts.app')
 
-<head>
+@section('title', 'Edit Menu')
 
-    <meta charset="UTF-8">
+@section('content')
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <div class="menu-edit-page">
 
-    <title>Edit Menu</title>
+        <div class="menu-edit-container">
 
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+            <h1>Edit Menu</h1>
 
-</head>
-
-<body class="menu-edit-page">
-
-<div class="menu-edit-container">
-
-    <h1>Edit Menu</h1>
-
-    <form
-        action="{{ route('menus.update', $menu->id) }}"
-        method="POST"
-        enctype="multipart/form-data"
-    >
-
-        @csrf
-
-        @method('PUT')
-
-        <div class="form-group">
-
-            <label for="category_id">
-                Kategori
-            </label>
-
-            <select
-                name="category_id"
-                id="category_id"
+            <form
+                action="{{ route('menus.update', $menu->id) }}"
+                method="POST"
+                enctype="multipart/form-data"
             >
 
-                <option value="">
-                    -- Pilih Kategori --
-                </option>
+                @csrf
 
-                @foreach ($categories as $category)
+                @method('PUT')
 
-                    <option
-                        value="{{ $category->id }}"
-                        {{ old('category_id', $menu->category_id) == $category->id ? 'selected' : '' }}
+                <div class="form-group">
+
+                    <label for="category_id">
+                        Kategori
+                    </label>
+
+                    <select
+                        name="category_id"
+                        id="category_id"
                     >
-                        {{ $category->name }}
-                    </option>
 
-                @endforeach
+                        <option value="">
+                            -- Pilih Kategori --
+                        </option>
 
-            </select>
+                        @foreach ($categories as $category)
 
-            @error('category_id')
+                            <option
+                                value="{{ $category->id }}"
+                                {{ old('category_id', $menu->category_id) == $category->id ? 'selected' : '' }}
+                            >
+                                {{ $category->name }}
+                            </option>
 
-                <div class="error">
-                    {{ $message }}
+                        @endforeach
+
+                    </select>
+
+                    @error('category_id')
+
+                        <div class="error">
+                            {{ $message }}
+                        </div>
+
+                    @enderror
+
                 </div>
 
-            @enderror
+                <div class="form-group">
 
-        </div>
+                    <label for="name">
+                        Nama Menu
+                    </label>
 
-        <div class="form-group">
+                    <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        value="{{ old('name', $menu->name) }}"
+                    >
 
-            <label for="name">
-                Nama Menu
-            </label>
+                    @error('name')
 
-            <input
-                type="text"
-                id="name"
-                name="name"
-                value="{{ old('name', $menu->name) }}"
-            >
+                        <div class="error">
+                            {{ $message }}
+                        </div>
 
-            @error('name')
+                    @enderror
 
-                <div class="error">
-                    {{ $message }}
                 </div>
 
-            @enderror
+                <div class="form-group">
 
-        </div>
+                    <label for="price">
+                        Harga
+                    </label>
 
-        <div class="form-group">
+                    <input
+                        type="number"
+                        id="price"
+                        name="price"
+                        value="{{ old('price', $menu->price) }}"
+                        min="0"
+                    >
 
-            <label for="price">
-                Harga
-            </label>
+                    @error('price')
 
-            <input
-                type="number"
-                id="price"
-                name="price"
-                value="{{ old('price', $menu->price) }}"
-                min="0"
-            >
+                        <div class="error">
+                            {{ $message }}
+                        </div>
 
-            @error('price')
+                    @enderror
 
-                <div class="error">
-                    {{ $message }}
                 </div>
 
-            @enderror
+                <div class="form-group">
 
-        </div>
+                    <label for="stock">
+                        Stok
+                    </label>
 
-        <div class="form-group">
+                    <input
+                        type="number"
+                        id="stock"
+                        name="stock"
+                        value="{{ old('stock', $menu->stock) }}"
+                        min="0"
+                    >
 
-            <label for="stock">
-                Stok
-            </label>
+                    @error('stock')
 
-            <input
-                type="number"
-                id="stock"
-                name="stock"
-                value="{{ old('stock', $menu->stock) }}"
-                min="0"
-            >
+                        <div class="error">
+                            {{ $message }}
+                        </div>
 
-            @error('stock')
+                    @enderror
 
-                <div class="error">
-                    {{ $message }}
                 </div>
 
-            @enderror
+                <div class="form-group">
 
-        </div>
+                    <label>
+                        Foto Saat Ini
+                    </label>
 
-        <div class="form-group">
+                    @if ($menu->image)
 
-            <label>
-                Foto Saat Ini
-            </label>
+                        <br>
 
-            @if ($menu->image)
+                        <img
+                            src="{{ asset($menu->image) }}"
+                            alt="{{ $menu->name }}"
+                            class="current-image"
+                        >
 
-                <br>
+                    @else
 
-                <img
-                    src="{{ asset($menu->image) }}"
-                    alt="{{ $menu->name }}"
-                    class="current-image"
+                        <p>
+                            Belum ada foto.
+                        </p>
+
+                    @endif
+
+                </div>
+
+                <div class="form-group">
+
+                    <label for="image">
+                        Ganti Foto
+                    </label>
+
+                    <input
+                        type="file"
+                        id="image"
+                        name="image"
+                        accept=".jpg,.jpeg,.png,.webp"
+                    >
+
+                    <small>
+                        Kosongkan jika tidak ingin mengganti foto.
+                    </small>
+
+                    @error('image')
+
+                        <div class="error">
+                            {{ $message }}
+                        </div>
+
+                    @enderror
+
+                </div>
+
+                <a
+                    href="{{ route('menus.index') }}"
+                    class="btn btn-secondary"
                 >
+                    Kembali
+                </a>
 
-            @else
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                >
+                    Update
+                </button>
 
-                <p>
-                    Belum ada foto.
-                </p>
-
-            @endif
-
-        </div>
-
-        <div class="form-group">
-
-            <label for="image">
-                Ganti Foto
-            </label>
-
-            <input
-                type="file"
-                id="image"
-                name="image"
-                accept=".jpg,.jpeg,.png,.webp"
-            >
-
-            <small>
-                Kosongkan jika tidak ingin mengganti foto.
-            </small>
-
-            @error('image')
-
-                <div class="error">
-                    {{ $message }}
-                </div>
-
-            @enderror
+            </form>
 
         </div>
 
-        <a
-            href="{{ route('menus.index') }}"
-            class="btn btn-secondary"
-        >
-            Kembali
-        </a>
+    </div>
 
-        <button
-            type="submit"
-            class="btn btn-primary"
-        >
-            Update
-        </button>
-
-    </form>
-
-</div>
-
-</body>
-
-</html>
+@endsection

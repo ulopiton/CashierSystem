@@ -1,155 +1,187 @@
-<!DOCTYPE html>
-<html lang="id">
+@extends('layouts.app')
 
-<head>
+@section('title', 'Detail Transaksi')
 
-    <meta charset="UTF-8">
+@section('content')
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+<div class="transaction-show-page">
+
+    <div class="transaction-show-container">
+
+        <h1>
+            Detail Transaksi
+        </h1>
 
 
-    <title>Detail Transaksi</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+        {{-- ========================= --}}
+        {{-- INFORMASI TRANSAKSI --}}
+        {{-- ========================= --}}
 
-</head>
+        <div class="card">
 
-<body class="transaction-show-page">
+            <div class="info">
 
-<div class="transaction-show-container">
+                <strong>
+                    Invoice
+                </strong>
 
-    <h1>Detail Transaksi</h1>
+                {{ $transaction->invoice_number }}
 
-    <div class="card">
+            </div>
 
-        <div class="info">
 
-            <strong>Invoice</strong>
+            <div class="info">
 
-            {{ $transaction->invoice_number }}
+                <strong>
+                    Tanggal
+                </strong>
+
+                {{ $transaction->created_at->format('d/m/Y H:i:s') }}
+
+            </div>
 
         </div>
 
-        <div class="info">
 
-            <strong>Tanggal</strong>
+        {{-- ========================= --}}
+        {{-- DAFTAR MENU --}}
+        {{-- ========================= --}}
 
-            {{ $transaction->created_at->format('d/m/Y H:i:s') }}
+        <div class="card">
 
-        </div>
+            <h2>
+                Daftar Menu
+            </h2>
 
-    </div>
+            <table>
 
-    <div class="card">
-
-        <h2>Daftar Menu</h2>
-
-        <table>
-
-            <thead>
-
-                <tr>
-
-                    <th>No</th>
-
-                    <th>Menu</th>
-
-                    <th>Harga</th>
-
-                    <th>Jumlah</th>
-
-                    <th>Subtotal</th>
-
-                </tr>
-
-            </thead>
-
-            <tbody>
-
-                @foreach ($transaction->details as $detail)
+                <thead>
 
                     <tr>
 
-                        <td>
-                            {{ $loop->iteration }}
-                        </td>
+                        <th>No</th>
 
-                        <td>
-                            {{ $detail->menu->name }}
-                        </td>
+                        <th>Menu</th>
 
-                        <td>
-                            Rp {{ number_format($detail->price, 0, ',', '.') }}
-                        </td>
+                        <th>Harga</th>
 
-                        <td>
-                            {{ $detail->quantity }}
-                        </td>
+                        <th>Jumlah</th>
 
-                        <td>
-                            Rp {{ number_format($detail->subtotal, 0, ',', '.') }}
-                        </td>
+                        <th>Subtotal</th>
 
                     </tr>
 
-                @endforeach
+                </thead>
 
-            </tbody>
 
-        </table>
+                <tbody>
 
-    </div>
+                    @foreach ($transaction->details as $detail)
 
-    <div class="card">
+                        <tr>
 
-        <div class="info">
+                            <td>
+                                {{ $loop->iteration }}
+                            </td>
 
-            <strong>Total</strong>
+                            <td>
+                                {{ $detail->menu->name }}
+                            </td>
 
-            Rp {{ number_format($transaction->total_amount, 0, ',', '.') }}
+                            <td>
+                                Rp
+                                {{ number_format($detail->price, 0, ',', '.') }}
+                            </td>
+
+                            <td>
+                                {{ $detail->quantity }}
+                            </td>
+
+                            <td>
+                                Rp
+                                {{ number_format($detail->subtotal, 0, ',', '.') }}
+                            </td>
+
+                        </tr>
+
+                    @endforeach
+
+                </tbody>
+
+            </table>
 
         </div>
 
-        <div class="info">
 
-            <strong>Dibayar</strong>
+        {{-- ========================= --}}
+        {{-- RINGKASAN PEMBAYARAN --}}
+        {{-- ========================= --}}
 
-            Rp {{ number_format($transaction->payment_amount, 0, ',', '.') }}
+        <div class="card">
+
+            <div class="info">
+
+                <strong>
+                    Total
+                </strong>
+
+                Rp
+                {{ number_format($transaction->total_amount, 0, ',', '.') }}
+
+            </div>
+
+
+            <div class="info">
+
+                <strong>
+                    Dibayar
+                </strong>
+
+                Rp
+                {{ number_format($transaction->payment_amount, 0, ',', '.') }}
+
+            </div>
+
+
+            <div class="info">
+
+                <strong>
+                    Kembalian
+                </strong>
+
+                Rp
+                {{ number_format($transaction->change_amount, 0, ',', '.') }}
+
+            </div>
 
         </div>
 
-        <div class="info">
 
-            <strong>Kembalian</strong>
+        {{-- ========================= --}}
+        {{-- ACTION --}}
+        {{-- ========================= --}}
 
-            Rp {{ number_format($transaction->change_amount, 0, ',', '.') }}
+        <div class="actions">
+
+            <a
+                href="{{ route('transactions.history') }}"
+                class="btn btn-back"
+            >
+                Kembali ke Riwayat
+            </a>
+
+
+            <a
+                href="{{ route('transactions.receipt', $transaction->id) }}"
+                class="btn btn-receipt"
+            >
+                Lihat Struk
+            </a>
 
         </div>
-
-    </div>
-
-    <div class="actions">
-
-        <a
-            href="{{ route('transactions.history') }}"
-            class="btn btn-back"
-        >
-            Kembali ke Riwayat
-        </a>
-
-        <a
-            href="{{ route('transactions.receipt', $transaction->id) }}"
-            class="btn btn-receipt"
-        >
-            Lihat Struk
-        </a>
 
     </div>
 
 </div>
 
-</body>
-
-</html>
+@endsection
