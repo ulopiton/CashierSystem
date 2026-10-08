@@ -10,237 +10,297 @@ use App\Models\Menu;
 
 class TransactionController extends Controller
 {
-  // Menampilkan halaman kasir
-  public function index(Request $request)
-  {
-    $menus = Menu::with("category")
-      ->where("stock", ">", 0)
-      ->orderBy("name")
-      ->get();
+	// Menampilkan halaman kasir
+	public function index(Request $request)
+	{
+		$menus = Menu::with("category")
+			->where("stock", ">", 0)
+			->orderBy("name")
+			->get();
 
-    $cart = $request->session()->get("cart", []);
+		$cart = $request->session()->get("cart", []);
 
-    return view("transactions.index", compact("menus", "cart"));
-  }
+		return view("transactions.index", compact("menus", "cart"));
+	}
 
-  // Menambahkan menu ke keranjang
-  public function addToCart(Request $request)
-  {
-    $request->validate([
-      "menu_id" => "required|exists:menus,id",
-      "quantity" => "required|integer|min:1",
-    ]);
+	// Menambahkan menu ke keranjang
+	public function addToCart(Request $request)
+	{
+		$request->validate([
+			"menu_id" => "required|exists:menus,id",
+			"quantity" => "required|integer|min:1",
+		]);
 
-    $menu = Menu::findOrFail($request->menu_id);
+		$menu = Menu::findOrFail($request->menu_id);
 
-    // Cek stok
-    if ($menu->stock < $request->quantity) {
-      return redirect()
-        ->route("transactions.index")
-        ->with("error", "Jumlah melebihi stok yang tersedia.");
-    }
+		// Cek stok
+		if ($menu->stock < $request->quantity) {
+			if ($request->expectsJson()) {
+				return response()->json(
+					[
+						"success" => false,
+						"message" => "Jumlah melebihi stok yang tersedia.",
+					],
+					422
+				);
+			}
 
-    $cart = $request->session()->get("cart", []);
+			return redirect()
+				->route("transactions.index")
+				->with("error", "Jumlah melebihi stok yang tersedia.");
+		}
 
-    $menuId = $menu->id;
+		$cart = $request->session()->get("cart", []);
 
-    // Jika menu sudah ada di cart
-    if (isset($cart[$menuId])) {
-      $newQuantity = $cart[$menuId]["quantity"] + $request->quantity;
+		$menuId = $menu->id;
 
-      // Cek total quantity dengan stok
-      if ($newQuantity > $menu->stock) {
-        return redirect()
-          ->route("transactions.index")
-          ->with("error", "Jumlah melebihi stok yang tersedia.");
-      }
+		// Jika menu sudah ada di cart
+		if (isset($cart[$menuId])) {
+			$newQuantity = $cart[$menuId]["quantity"] + $request->quantity;
 
-      $cart[$menuId]["quantity"] = $newQuantity;
+			// Cek total quantity dengan stok
+			if ($newQuantity > $menu->stock) {
+				if ($request->expectsJson()) {
+					return response()->json(
+						[
+							"success" => false,
+							"message" => "Jumlah melebihi stok yang tersedia.",
+						],
+						422
+					);
+				}
 
-      $cart[$menuId]["subtotal"] = $cart[$menuId]["price"] * $newQuantity;
-    } else {
-      // Menu baru
-      $cart[$menuId] = [
-        "menu_id" => $menu->id,
-        "name" => $menu->name,
-        "price" => $menu->price,
-        "quantity" => $request->quantity,
-        "subtotal" => $menu->price * $request->quantity,
-      ];
-    }
+				return redirect()
+					->route("transactions.index")
+					->with("error", "Jumlah melebihi stok yang tersedia.");
+			}
 
-    $request->session()->put("cart", $cart);
+			$cart[$menuId]["quantity"] = $newQuantity;
 
-    return redirect()
-      ->route("transactions.index")
-      ->with("success", "Menu berhasil ditambahkan ke keranjang.");
-  }
+			$cart[$menuId]["subtotal"] = $cart[$menuId]["price"] * $newQuantity;
+		} else {
+			// Menu baru
+			$cart[$menuId] = [
+				"menu_id" => $menu->id,
+				"name" => $menu->name,
+				"price" => $menu->price,
+				"quantity" => $request->quantity,
+				"subtotal" => $menu->price * $request->quantity,
+			];
+		}
 
-  // Mengubah jumlah item di keranjang
-  public function updateCart(Request $request)
-  {
-    $request->validate([
-      "menu_id" => "required|exists:menus,id",
-      "quantity" => "required|integer|min:1",
-    ]);
+		$request->session()->put("cart", $cart);
 
-    $menu = Menu::findOrFail($request->menu_id);
+		// RESPONSE AJAX
 
-    $cart = $request->session()->get("cart", []);
+		if ($request->expectsJson()) {
+			$total = 0;
 
-    // Pastikan item memang ada di cart
-    if (!isset($cart[$menu->id])) {
-      return redirect()
-        ->route("transactions.index")
-        ->with("error", "Menu tidak ditemukan di keranjang.");
-    }
+			foreach ($cart as $item) {
+				$total += $item["subtotal"];
+			}
 
-    // Cek stok terbaru
-    if ($request->quantity > $menu->stock) {
-      return redirect()
-        ->route("transactions.index")
-        ->with("error", "Jumlah melebihi stok yang tersedia.");
-    }
+			return response()->json([
+				"success" => true,
+				"message" => "Menu berhasil ditambahkan ke keranjang.",
+				"cart" => $cart,
+				"total" => $total,
+			]);
+		}
+	}
 
-    $cart[$menu->id]["quantity"] = $request->quantity;
+	// Mengubah jumlah item di keranjang
+	public function updateCart(Request $request)
+	{
+		$request->validate([
+			"menu_id" => "required|exists:menus,id",
+			"quantity" => "required|integer|min:1",
+		]);
 
-    $cart[$menu->id]["subtotal"] =
-      $cart[$menu->id]["price"] * $request->quantity;
+		$menu = Menu::findOrFail($request->menu_id);
 
-    $request->session()->put("cart", $cart);
+		$cart = $request->session()->get("cart", []);
 
-    return redirect()
-      ->route("transactions.index")
-      ->with("success", "Jumlah menu berhasil diperbarui.");
-  }
+		// Pastikan item memang ada di cart
+		if (!isset($cart[$menu->id])) {
+			return redirect()
+				->route("transactions.index")
+				->with("error", "Menu tidak ditemukan di keranjang.");
+		}
 
-  // Memproses pembayaran
-  public function payment(Request $request)
-  {
-    $request->validate([
-      "payment_amount" => "required|numeric|min:0",
-    ]);
+		// Cek stok terbaru
+		if ($request->quantity > $menu->stock) {
+			return redirect()
+				->route("transactions.index")
+				->with("error", "Jumlah melebihi stok yang tersedia.");
+		}
 
-    $cart = $request->session()->get("cart", []);
+		$cart[$menu->id]["quantity"] = $request->quantity;
 
-    if (empty($cart)) {
-      return redirect()
-        ->route("transactions.index")
-        ->with("error", "Keranjang masih kosong.");
-    }
+		$cart[$menu->id]["subtotal"] =
+			$cart[$menu->id]["price"] * $request->quantity;
 
-    $total = 0;
+		$request->session()->put("cart", $cart);
 
-    foreach ($cart as $item) {
-      $total += $item["subtotal"];
-    }
+		return redirect()
+			->route("transactions.index")
+			->with("success", "Jumlah menu berhasil diperbarui.");
+	}
 
-    $payment = $request->payment_amount;
+	// Memproses pembayaran
+	public function payment(Request $request)
+	{
+		$request->validate([
+			"payment_amount" => "required|numeric|min:0",
+		]);
 
-    if ($payment < $total) {
-      return redirect()
-        ->route("transactions.index")
-        ->with("error", "Pembayaran kurang dari total transaksi.");
-    }
+		$cart = $request->session()->get("cart", []);
 
-    $change = $payment - $total;
+		if (empty($cart)) {
+			return redirect()
+				->route("transactions.index")
+				->with("error", "Keranjang masih kosong.");
+		}
 
-    $transaction = DB::transaction(function () use (
-      $cart,
-      $total,
-      $payment,
-      $change
-    ) {
-      $invoiceNumber = "INV-" . now()->format("YmdHis");
+		$total = 0;
 
-      $transaction = Transaction::create([
-        "invoice_number" => $invoiceNumber,
-        "total_amount" => $total,
-        "payment_amount" => $payment,
-        "change_amount" => $change,
-      ]);
+		foreach ($cart as $item) {
+			$total += $item["subtotal"];
+		}
 
-      foreach ($cart as $item) {
-        $menu = Menu::findOrFail($item["menu_id"]);
+		$payment = $request->payment_amount;
 
-        if ($menu->stock < $item["quantity"]) {
-          throw new \Exception("Stok menu {$menu->name} tidak mencukupi.");
-        }
+		if ($payment < $total) {
+			return redirect()
+				->route("transactions.index")
+				->with("error", "Pembayaran kurang dari total transaksi.");
+		}
 
-        TransactionDetail::create([
-          "transaction_id" => $transaction->id,
-          "menu_id" => $menu->id,
-          "quantity" => $item["quantity"],
-          "price" => $item["price"],
-          "subtotal" => $item["subtotal"],
-        ]);
+		$change = $payment - $total;
 
-        $menu->decrement("stock", $item["quantity"]);
-      }
+		$transaction = DB::transaction(function () use (
+			$cart,
+			$total,
+			$payment,
+			$change
+		) {
+			$invoiceNumber = "INV-" . now()->format("YmdHis");
 
-      return $transaction;
-    });
+			$transaction = Transaction::create([
+				"invoice_number" => $invoiceNumber,
+				"total_amount" => $total,
+				"payment_amount" => $payment,
+				"change_amount" => $change,
+			]);
 
-    $request->session()->forget("cart");
-    $request->session()->forget("payment");
+			foreach ($cart as $item) {
+				$menu = Menu::findOrFail($item["menu_id"]);
 
-    return redirect()->route("transactions.receipt", $transaction->id);
-  }
+				if ($menu->stock < $item["quantity"]) {
+					throw new \Exception("Stok menu {$menu->name} tidak mencukupi.");
+				}
 
-  // Buat struk untuk dicetak
-  public function receipt(Transaction $transaction)
-  {
-    $transaction->load("details.menu");
+				TransactionDetail::create([
+					"transaction_id" => $transaction->id,
+					"menu_id" => $menu->id,
+					"quantity" => $item["quantity"],
+					"price" => $item["price"],
+					"subtotal" => $item["subtotal"],
+				]);
 
-    return view("transactions.receipt", compact("transaction"));
-  }
+				$menu->decrement("stock", $item["quantity"]);
+			}
 
-  // History transaksi
-  public function history(Request $request)
-  {
-    $query = Transaction::query();
+			return $transaction;
+		});
 
-    if ($request->filled("invoice")) {
-      $query->where("invoice_number", "like", "%" . $request->invoice . "%");
-    }
+		$request->session()->forget("cart");
+		$request->session()->forget("payment");
 
-    if ($request->filled("date_from")) {
-      $query->whereDate("created_at", ">=", $request->date_from);
-    }
+		return redirect()->route("transactions.receipt", $transaction->id);
+	}
 
-    if ($request->filled("date_to")) {
-      $query->whereDate("created_at", "<=", $request->date_to);
-    }
+	// Buat struk untuk dicetak
+	public function receipt(Transaction $transaction)
+	{
+		$transaction->load("details.menu");
 
-    $transactions = $query->latest()->get();
+		return view("transactions.receipt", compact("transaction"));
+	}
 
-    return view("transactions.history", compact("transactions"));
-  }
+	// History transaksi
+	public function history(Request $request)
+	{
+		$query = Transaction::query();
 
-  // Menghapus item dari keranjang
-  public function removeFromCart(Request $request)
-  {
-    $request->validate([
-      "menu_id" => "required|exists:menus,id",
-    ]);
+		if ($request->filled("invoice")) {
+			$query->where("invoice_number", "like", "%" . $request->invoice . "%");
+		}
 
-    $cart = $request->session()->get("cart", []);
+		if ($request->filled("date_from")) {
+			$query->whereDate("created_at", ">=", $request->date_from);
+		}
 
-    if (isset($cart[$request->menu_id])) {
-      unset($cart[$request->menu_id]);
-    }
+		if ($request->filled("date_to")) {
+			$query->whereDate("created_at", "<=", $request->date_to);
+		}
 
-    $request->session()->put("cart", $cart);
+		$transactions = $query->latest()->get();
 
-    return redirect()
-      ->route("transactions.index")
-      ->with("success", "Menu berhasil dihapus dari keranjang.");
-  }
+		return view("transactions.history", compact("transactions"));
+	}
 
-  public function show(Transaction $transaction)
-  {
-    $transaction->load("details.menu");
+	// Menghapus item dari keranjang
+	public function removeFromCart(Request $request)
+	{
+		$request->validate([
+			"menu_id" => "required|exists:menus,id",
+		]);
 
-    return view("transactions.show", compact("transaction"));
-  }
+		$cart = $request->session()->get("cart", []);
+
+		if (!isset($cart[$request->menu_id])) {
+			if ($request->expectsJson()) {
+				return response()->json(
+					[
+						"success" => false,
+						"message" => "Menu tidak ditemukan di keranjang.",
+					],
+					404
+				);
+			}
+
+			return redirect()
+				->route("transactions.index")
+				->with("error", "Menu tidak ditemukan di keranjang.");
+		}
+
+		unset($cart[$request->menu_id]);
+
+		$request->session()->put("cart", $cart);
+
+		// RESPONSE AJAX
+		if ($request->expectsJson()) {
+			$total = 0;
+
+			foreach ($cart as $item) {
+				$total += $item["subtotal"];
+			}
+
+			return response()->json([
+				"success" => true,
+				"message" => "Menu berhasil dihapus dari keranjang.",
+				"cart" => $cart,
+				"total" => $total,
+			]);
+		}
+	}
+
+	// Detail transaksi
+	public function show(Transaction $transaction)
+	{
+		$transaction->load("details.menu");
+
+		return view("transactions.show", compact("transaction"));
+	}
 }
