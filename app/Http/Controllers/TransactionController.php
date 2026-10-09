@@ -123,6 +123,16 @@ class TransactionController extends Controller
 
 		// Pastikan item memang ada di cart
 		if (!isset($cart[$menu->id])) {
+			if ($request->expectsJson()) {
+				return response()->json(
+					[
+						"success" => false,
+						"message" => "Menu tidak ditemukan di keranjang.",
+					],
+					404
+				);
+			}
+
 			return redirect()
 				->route("transactions.index")
 				->with("error", "Menu tidak ditemukan di keranjang.");
@@ -130,6 +140,16 @@ class TransactionController extends Controller
 
 		// Cek stok terbaru
 		if ($request->quantity > $menu->stock) {
+			if ($request->expectsJson()) {
+				return response()->json(
+					[
+						"success" => false,
+						"message" => "Jumlah melebihi stok yang tersedia.",
+					],
+					422
+				);
+			}
+
 			return redirect()
 				->route("transactions.index")
 				->with("error", "Jumlah melebihi stok yang tersedia.");
@@ -142,9 +162,21 @@ class TransactionController extends Controller
 
 		$request->session()->put("cart", $cart);
 
-		return redirect()
-			->route("transactions.index")
-			->with("success", "Jumlah menu berhasil diperbarui.");
+		// RESPONSE AJAX
+		if ($request->expectsJson()) {
+			$total = 0;
+
+			foreach ($cart as $item) {
+				$total += $item["subtotal"];
+			}
+
+			return response()->json([
+				"success" => true,
+				"message" => "Jumlah menu berhasil diperbarui.",
+				"cart" => $cart,
+				"total" => $total,
+			]);
+		}
 	}
 
 	// Memproses pembayaran
