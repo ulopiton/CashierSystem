@@ -751,6 +751,7 @@ th {
   padding: 30px;
   background: #f5f5f5;
   font-family: Arial, sans-serif;
+  color: #212529;
 }
 
 .transaction-receipt-page .receipt {
@@ -841,12 +842,6 @@ th {
   padding: 10px 16px;
 }
 
-/* WARNA HALAMAN STRUK */
-.transaction-receipt-page {
-  color: #212529;
-  background: #f5f5f5;
-}
-
 /* ==================================================
    RESPONSIVE
 ================================================== */
@@ -932,7 +927,6 @@ th {
    BUTTON SYSTEM — SHARED BASE
 ================================================== */
 
-/* Tombol umum di halaman aplikasi */
 .category-page .btn,
 .category-create-page .btn,
 .category-edit-page .btn,
