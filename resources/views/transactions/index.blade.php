@@ -7,17 +7,19 @@
 <div class="transaction-page">
 
     {{-- PESAN BERHASIL --}}
-    @if (session('success'))
-        <div class="message success">
-            {{ session('success') }}
-        </div>
+    @if (session('success')) <div class="message success" role="alert">
+    {{ session('success') }} </div>
     @endif
-
+    
     {{-- PESAN ERROR --}}
-    @if (session('error'))
-        <div class="message error">
-            {{ session('error') }}
-        </div>
+    @if (session('error')) <div class="message error" role="alert">
+    {{ session('error') }} </div>
+    @endif
+    
+    {{-- PESAN VALIDASI --}}
+    @if ($errors->any()) <div class="message error" role="alert"> <ul>
+    @foreach ($errors->all() as $error) <li>{{ $error }}</li>
+    @endforeach </ul> </div>
     @endif
 
     {{-- LAYOUT UTAMA --}}

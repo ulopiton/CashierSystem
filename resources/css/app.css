@@ -330,105 +330,8 @@ th {
 }
 
 /* ==================================================
-   CASHIER BUTTONS & INPUTS
+   CASHIER INPUTS
 ================================================== */
-
-.transaction-page .btn,
-.transaction-page .payment-button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  padding: 9px 14px;
-  border: none;
-  border-radius: 7px;
-  font-family: inherit;
-  font-size: 14px;
-  font-weight: 600;
-  line-height: 1.2;
-  cursor: pointer;
-  text-decoration: none;
-  transition:
-    background-color 0.2s ease,
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
-}
-
-.transaction-page .btn-add {
-  width: 100%;
-  margin-top: 8px;
-  color: #fff;
-  background: #2563eb;
-  box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);
-}
-
-.transaction-page .btn-add:hover:not(:disabled) {
-  background: #1d4ed8;
-  box-shadow: 0 4px 8px rgba(37, 99, 235, 0.25);
-  transform: translateY(-1px);
-}
-
-.transaction-page .cart-update-form .btn {
-  min-width: 34px;
-  min-height: 34px;
-  padding: 6px 10px;
-  color: #1f2937;
-  background: #e5e7eb;
-  border: 1px solid #d1d5db;
-  font-size: 18px;
-}
-
-.transaction-page .cart-update-form .btn:hover:not(:disabled) {
-  background: #d1d5db;
-}
-
-.transaction-page .cart-remove-form .btn {
-  padding: 7px 12px;
-  color: #b91c1c;
-  background: #fee2e2;
-  border: 1px solid #fecaca;
-}
-
-.transaction-page .cart-remove-form .btn:hover {
-  background: #fecaca;
-}
-
-.transaction-page .btn:disabled {
-  opacity: 0.45;
-  cursor: not-allowed;
-  transform: none;
-  box-shadow: none;
-}
-
-.transaction-page .payment-button {
-  width: 100%;
-  min-height: 44px;
-  margin-top: 14px;
-  color: #fff;
-  background: #16a34a;
-  font-size: 15px;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  box-shadow: 0 3px 6px rgba(22, 163, 74, 0.2);
-}
-
-.transaction-page .payment-button:hover:not(:disabled) {
-  background: #15803d;
-  box-shadow: 0 5px 10px rgba(22, 163, 74, 0.25);
-  transform: translateY(-1px);
-}
-
-.transaction-page .btn:active:not(:disabled),
-.transaction-page .payment-button:active:not(:disabled) {
-  transform: translateY(0);
-  box-shadow: none;
-}
-
-.transaction-page .btn:focus-visible,
-.transaction-page .payment-button:focus-visible {
-  outline: 3px solid #93c5fd;
-  outline-offset: 2px;
-}
 
 .transaction-page .quantity-input,
 .transaction-page .payment-input {
@@ -490,67 +393,38 @@ th {
 }
 
 /* ==================================================
-   SHARED PAGE BUTTONS
-================================================== */
-
-.category-page .btn,
-.menu-index-page .btn,
-.menu-create-page .btn,
-.menu-edit-page .btn,
-.transaction-history-page .btn,
-.transaction-show-page .btn,
-.transaction-receipt-page .btn {
-  display: inline-block;
-  padding: 8px 14px;
-  border: none;
-  border-radius: 5px;
-  font-size: 14px;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-.category-page .btn-primary,
-.menu-index-page .btn-primary,
-.menu-create-page .btn-primary {
-  color: #fff;
-  background: #2563eb;
-}
-
-.category-page .btn-warning,
-.menu-index-page .btn-warning {
-  color: #fff;
-  background: #f59e0b;
-}
-
-.category-page .btn-danger,
-.menu-index-page .btn-danger {
-  color: #fff;
-  background: #dc2626;
-}
-
-.category-page .btn-secondary,
-.menu-index-page .btn-secondary,
-.menu-create-page .btn-secondary,
-.menu-edit-page .btn-secondary {
-  color: #fff;
-  background: #6b7280;
-}
-
-/* ==================================================
-   SHARED ALERTS
+   SHARED ALERTS — KATEGORI & MENU
 ================================================== */
 
 .category-page .alert,
 .menu-index-page .alert {
-  padding: 12px;
+  padding: 12px 14px;
   margin-bottom: 20px;
-  border-radius: 5px;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  font-size: 14px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
 }
 
 .category-page .alert-success,
 .menu-index-page .alert-success {
   color: #166534;
   background: #dcfce7;
+  border-color: #bbf7d0;
+}
+
+.category-page .alert-error,
+.menu-index-page .alert-error {
+  color: #991b1b;
+  background: #fef2f2;
+  border-color: #fecaca;
+}
+
+.category-page .alert ul,
+.menu-index-page .alert ul {
+  margin: 0;
+  padding-left: 20px;
 }
 
 /* ==================================================
@@ -706,7 +580,7 @@ th {
   margin-bottom: 20px;
 }
 
-.transaction-history-page .btn-cashier {
+.transaction-history-pages {
   color: #fff;
   background: #007bff;
 }
@@ -737,16 +611,6 @@ th {
 
 .transaction-history-page th {
   background: #f1f1f1;
-}
-
-.transaction-history-page .btn-receipt {
-  color: #fff;
-  background: #28a745;
-}
-
-.transaction-history-page .btn-detail {
-  color: #fff;
-  background: #17a2b8;
 }
 
 .transaction-history-page .empty {
@@ -869,11 +733,6 @@ th {
   border-radius: 6px;
 }
 
-.transaction-show-page .btn-back {
-  color: #fff;
-  background: #6c757d;
-}
-
 .transaction-show-page .btn-receipt {
   color: #fff;
   background: #28a745;
@@ -982,14 +841,10 @@ th {
   padding: 10px 16px;
 }
 
-.transaction-receipt-page .btn-print {
-  color: #fff;
-  background: #007bff;
-}
-
-.transaction-receipt-page .btn-back {
-  color: #fff;
-  background: #6c757d;
+/* WARNA HALAMAN STRUK */
+.transaction-receipt-page {
+  color: #212529;
+  background: #f5f5f5;
 }
 
 /* ==================================================
@@ -1071,4 +926,479 @@ th {
   .transaction-receipt-page .actions {
     display: none;
   }
+}
+
+/* ==================================================
+   BUTTON SYSTEM — SHARED BASE
+================================================== */
+
+/* Tombol umum di halaman aplikasi */
+.category-page .btn,
+.category-create-page .btn,
+.category-edit-page .btn,
+.menu-index-page .btn,
+.menu-create-page .btn,
+.menu-edit-page .btn,
+.transaction-page .btn,
+.transaction-history-page .btn,
+.transaction-show-page .btn,
+.transaction-receipt-page .btn,
+.quick-actions a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 38px;
+  padding: 9px 14px;
+  border: 1px solid transparent;
+  border-radius: 7px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.2;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.15s ease;
+}
+
+/* Fokus keyboard */
+.category-page .btn:focus-visible,
+.category-create-page .btn:focus-visible,
+.category-edit-page .btn:focus-visible,
+.menu-index-page .btn:focus-visible,
+.menu-create-page .btn:focus-visible,
+.menu-edit-page .btn:focus-visible,
+.transaction-page .btn:focus-visible,
+.transaction-page .payment-button:focus-visible,
+.transaction-history-page .btn:focus-visible,
+.transaction-show-page .btn:focus-visible,
+.transaction-receipt-page .btn:focus-visible,
+.quick-actions a:focus-visible {
+  outline: 3px solid rgba(37, 99, 235, 0.25);
+  outline-offset: 2px;
+}
+
+/* Efek tekan */
+.category-page .btn:active,
+.category-create-page .btn:active,
+.category-edit-page .btn:active,
+.menu-index-page .btn:active,
+.menu-create-page .btn:active,
+.menu-edit-page .btn:active,
+.transaction-page .btn:active:not(:disabled),
+.transaction-page .payment-button:active:not(:disabled),
+.transaction-history-page .btn:active,
+.transaction-show-page .btn:active,
+.transaction-receipt-page .btn:active,
+.quick-actions a:active {
+  transform: scale(0.98);
+}
+
+/* Tombol nonaktif */
+.category-page .btn:disabled,
+.category-create-page .btn:disabled,
+.category-edit-page .btn:disabled,
+.menu-index-page .btn:disabled,
+.menu-create-page .btn:disabled,
+.menu-edit-page .btn:disabled,
+.transaction-page .btn:disabled,
+.transaction-page .payment-button:disabled,
+.transaction-history-page .btn:disabled,
+.transaction-show-page .btn:disabled,
+.transaction-receipt-page .btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* ==================================================
+   PRIMARY — SIMPAN, TAMBAH, CARI
+================================================== */
+
+.category-page .btn-primary,
+.category-create-page .btn-primary,
+.category-edit-page .btn-primary,
+.menu-index-page .btn-primary,
+.menu-create-page .btn-primary,
+.menu-edit-page .btn-primary,
+.transaction-history-page .btn-search {
+  color: #fff;
+  background: #2563eb;
+  border-color: #2563eb;
+}
+
+.category-page .btn-primary:hover,
+.category-create-page .btn-primary:hover,
+.category-edit-page .btn-primary:hover,
+.menu-index-page .btn-primary:hover,
+.menu-create-page .btn-primary:hover,
+.menu-edit-page .btn-primary:hover,
+.transaction-history-page .btn-search:hover,
+.quick-actions a:hover {
+  color: #fff;
+  background: #1d4ed8;
+  border-color: #1d4ed8;
+  box-shadow: 0 3px 8px rgba(37, 99, 235, 0.18);
+}
+
+/* Tombol Tambah Menu pada halaman kasir */
+.transaction-page .btn-add {
+  width: 100%;
+  margin-top: 8px;
+}
+
+/* Tombol Kasir pada halaman riwayat */
+.transaction-history-page .btn-cashier {
+  color: #fff;
+  background: #2563eb;
+  border-color: #2563eb;
+}
+
+.transaction-history-page .btn-cashier:hover {
+  background: #1d4ed8;
+  border-color: #1d4ed8;
+}
+
+/* ==================================================
+   SECONDARY — KEMBALI, BATAL, RESET
+================================================== */
+
+.category-page .btn-secondary,
+.category-create-page .btn-secondary,
+.category-edit-page .btn-secondary,
+.menu-index-page .btn-secondary,
+.menu-create-page .btn-secondary,
+.menu-edit-page .btn-secondary,
+.transaction-history-page .btn-reset,
+.transaction-show-page .btn-back,
+.transaction-receipt-page .btn-back {
+  color: #374151;
+  background: #f3f4f6;
+  border-color: #d1d5db;
+}
+
+.category-page .btn-secondary:hover,
+.category-create-page .btn-secondary:hover,
+.category-edit-page .btn-secondary:hover,
+.menu-index-page .btn-secondary:hover,
+.menu-create-page .btn-secondary:hover,
+.menu-edit-page .btn-secondary:hover,
+.transaction-history-page .btn-reset:hover,
+.transaction-show-page .btn-back:hover,
+.transaction-receipt-page .btn-back:hover {
+  color: #111827;
+  background: #e5e7eb;
+  border-color: #cbd5e1;
+}
+
+/* ==================================================
+   WARNING — EDIT
+================================================== */
+
+.category-page .btn-warning,
+.menu-index-page .btn-warning {
+  color: #fff;
+  background: #d97706;
+  border-color: #d97706;
+}
+
+.category-page .btn-warning:hover,
+.menu-index-page .btn-warning:hover {
+  color: #fff;
+  background: #b45309;
+  border-color: #b45309;
+}
+
+/* ==================================================
+   DANGER — HAPUS
+================================================== */
+
+.category-page .btn-danger,
+.menu-index-page .btn-danger {
+  color: #fff;
+  background: #dc2626;
+  border-color: #dc2626;
+}
+
+.category-page .btn-danger:hover,
+.menu-index-page .btn-danger:hover {
+  color: #fff;
+  background: #b91c1c;
+  border-color: #b91c1c;
+}
+
+/* ==================================================
+   SUCCESS — BAYAR, STRUK
+================================================== */
+
+.transaction-page .payment-button:hover:not(:disabled) {
+  background: #15803d;
+  border-color: #15803d;
+  box-shadow: 0 5px 10px rgba(22, 163, 74, 0.22);
+}
+
+/* Lihat struk */
+.transaction-history-page .btn-receipt,
+.transaction-show-page .btn-receipt {
+  color: #fff;
+  background: #16a34a;
+  border-color: #16a34a;
+}
+
+.transaction-history-page .btn-receipt:hover,
+.transaction-show-page .btn-receipt:hover {
+  color: #fff;
+  background: #15803d;
+  border-color: #15803d;
+}
+
+/* Cetak struk */
+.transaction-receipt-page .btn-print {
+  color: #fff;
+  background: #2563eb;
+  border-color: #2563eb;
+}
+
+.transaction-receipt-page .btn-print:hover {
+  color: #fff;
+  background: #1d4ed8;
+  border-color: #1d4ed8;
+}
+
+/* ==================================================
+   INFO — DETAIL TRANSAKSI
+================================================== */
+
+.transaction-history-page .btn-detail {
+  color: #fff;
+  background: #0891b2;
+  border-color: #0891b2;
+}
+
+.transaction-history-page .btn-detail:hover {
+  color: #fff;
+  background: #0e7490;
+  border-color: #0e7490;
+}
+
+/* ==================================================
+   CASHIER — KONTROL KERANJANG
+================================================== */
+
+/* Tombol tambah/kurang jumlah */
+.transaction-page .cart-update-form .btn {
+  min-width: 34px;
+  min-height: 34px;
+  padding: 5px 10px;
+  color: #1f2937;
+  background: #e5e7eb;
+  border-color: #d1d5db;
+  border-radius: 6px;
+  font-size: 18px;
+}
+
+.transaction-page .cart-update-form .btn:hover:not(:disabled) {
+  background: #d1d5db;
+  border-color: #9ca3af;
+}
+
+/* Tombol hapus item dari keranjang */
+.transaction-page .cart-remove-form .btn {
+  min-height: 34px;
+  padding: 7px 12px;
+  color: #b91c1c;
+  background: #fee2e2;
+  border-color: #fecaca;
+  border-radius: 6px;
+}
+
+.transaction-page .cart-remove-form .btn:hover:not(:disabled) {
+  color: #991b1b;
+  background: #fecaca;
+  border-color: #fca5a5;
+}
+
+/* ==================================================
+   RESPONSIVE BUTTONS
+================================================== */
+
+@media (max-width: 480px) {
+  .category-page .btn,
+  .category-create-page .btn,
+  .category-edit-page .btn,
+  .menu-index-page .btn,
+  .menu-create-page .btn,
+  .menu-edit-page .btn,
+  .transaction-history-page .btn,
+  .transaction-show-page .btn,
+  .transaction-receipt-page .btn {
+    min-height: 40px;
+    padding: 9px 12px;
+    font-size: 13px;
+  }
+}
+
+/* ==================================================
+   AJAX ALERTS — HALAMAN KASIR
+================================================== */
+
+.transaction-page .flash-alert {
+  display: block;
+  width: 100%;
+  margin: 0 0 20px;
+  padding: 12px 16px;
+  border: 1px solid transparent;
+  border-left-width: 5px;
+  border-radius: 8px;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+  animation: cashier-alert-enter 0.2s ease-out;
+}
+
+.transaction-page .flash-alert--success {
+  color: #166534;
+  background: #f0fdf4;
+  border-color: #bbf7d0;
+  border-left-color: #16a34a;
+}
+
+.transaction-page .flash-alert--error {
+  color: #991b1b;
+  background: #fef2f2;
+  border-color: #fecaca;
+  border-left-color: #dc2626;
+}
+
+.transaction-page .flash-alert--warning {
+  color: #92400e;
+  background: #fffbeb;
+  border-color: #fde68a;
+  border-left-color: #f59e0b;
+}
+
+.transaction-page .flash-alert--info {
+  color: #1e40af;
+  background: #eff6ff;
+  border-color: #bfdbfe;
+  border-left-color: #2563eb;
+}
+
+@keyframes cashier-alert-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .transaction-page .flash-alert {
+    animation: none;
+  }
+}
+
+/* ========================================
+   TOMBOL KASIR
+======================================== */
+
+/* Tombol tambah menu */
+.transaction-page .btn-add {
+  width: 100%;
+  margin-top: 8px;
+}
+
+/* Tombol tambah dan kurangi jumlah */
+.transaction-page .cart-update-form .btn {
+  min-width: 36px;
+  min-height: 36px;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+
+/* Tombol hapus menu */
+.transaction-page .cart-remove-form .btn {
+  min-height: 36px;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+
+/* Kondisi tombol nonaktif */
+.transaction-page .btn:disabled,
+.transaction-page .payment-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Tombol bayar */
+.transaction-page .payment-button {
+  display: block;
+  width: 100%;
+  min-height: 42px;
+  padding: 10px 16px;
+  margin-top: 12px;
+  border: none;
+  border-radius: 6px;
+  background-color: #198754;
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.transaction-page .payment-button:hover:not(:disabled) {
+  background-color: #157347;
+}
+
+.transaction-page .payment-button:active:not(:disabled) {
+  background-color: #146c43;
+}
+
+.transaction-page .payment-button:focus-visible {
+  outline: 3px solid rgba(25, 135, 84, 0.35);
+  outline-offset: 2px;
+}
+
+/* Tombol tambah menu */
+.transaction-page .btn.btn-add {
+  width: 100%;
+  margin-top: 8px;
+  padding: 10px 14px;
+  border: none;
+  border-radius: 6px;
+  background-color: #0d6efd;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+/* Saat diarahkan kursor */
+.transaction-page .btn.btn-add:hover:not(:disabled) {
+  background-color: #0b5ed7;
+}
+
+/* Saat ditekan */
+.transaction-page .btn.btn-add:active:not(:disabled) {
+  background-color: #0a58ca;
+}
+
+/* Saat stok habis */
+.transaction-page .btn.btn-add:disabled {
+  background-color: #adb5bd;
+  color: #fff;
+  cursor: not-allowed;
+  opacity: 0.7;
 }

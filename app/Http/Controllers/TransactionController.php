@@ -41,7 +41,7 @@ class TransactionController extends Controller
 						"success" => false,
 						"message" => "Jumlah melebihi stok yang tersedia.",
 					],
-					422
+					422,
 				);
 			}
 
@@ -66,7 +66,7 @@ class TransactionController extends Controller
 							"success" => false,
 							"message" => "Jumlah melebihi stok yang tersedia.",
 						],
-						422
+						422,
 					);
 				}
 
@@ -129,7 +129,7 @@ class TransactionController extends Controller
 						"success" => false,
 						"message" => "Menu tidak ditemukan di keranjang.",
 					],
-					404
+					404,
 				);
 			}
 
@@ -146,7 +146,7 @@ class TransactionController extends Controller
 						"success" => false,
 						"message" => "Jumlah melebihi stok yang tersedia.",
 					],
-					422
+					422,
 				);
 			}
 
@@ -172,7 +172,7 @@ class TransactionController extends Controller
 
 			return response()->json([
 				"success" => true,
-				"message" => "Jumlah menu berhasil diperbarui.",
+				"message" => "Jumlah item berhasil diperbarui.",
 				"cart" => $cart,
 				"total" => $total,
 			]);
@@ -214,7 +214,7 @@ class TransactionController extends Controller
 			$cart,
 			$total,
 			$payment,
-			$change
+			$change,
 		) {
 			$invoiceNumber = "INV-" . now()->format("YmdHis");
 
@@ -298,7 +298,7 @@ class TransactionController extends Controller
 						"success" => false,
 						"message" => "Menu tidak ditemukan di keranjang.",
 					],
-					404
+					404,
 				);
 			}
 

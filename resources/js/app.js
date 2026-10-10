@@ -1,4 +1,50 @@
 document.addEventListener("DOMContentLoaded", function () {
+  // NOTIFIKASI AJAX
+  function showFlashAlert(message, type = "info") {
+    const page = document.querySelector(".transaction-page");
+
+    if (!page) return;
+
+    // Hapus notifikasi AJAX sebelumnya agar tidak menumpuk
+    const previousAlert = page.querySelector(".ajax-flash-alert");
+
+    if (previousAlert) {
+      previousAlert.remove();
+    }
+
+    const alertElement = document.createElement("div");
+    alertElement.className = `flash-alert flash-alert--${type} ajax-flash-alert`;
+
+    alertElement.setAttribute("role", "alert");
+    alertElement.textContent = message;
+
+    // Letakkan notifikasi di atas layout kasir
+    const layout = page.querySelector(".layout");
+
+    if (layout) {
+      page.insertBefore(alertElement, layout);
+    } else {
+      page.prepend(alertElement);
+    }
+  }
+
+  // AMBIL PESAN ERROR DARI SERVER
+  function getErrorMessage(data, fallback) {
+    if (data.message) {
+      return data.message;
+    }
+
+    if (data.errors) {
+      const firstError = Object.values(data.errors).flat()[0];
+
+      if (firstError) {
+        return firstError;
+      }
+    }
+
+    return fallback;
+  }
+
   //TAMBAH MENU
   document.querySelectorAll(".add-form").forEach(function (form) {
     form.addEventListener("submit", async function (event) {
@@ -20,15 +66,20 @@ document.addEventListener("DOMContentLoaded", function () {
           body: new FormData(form),
         });
 
-        const data = await response.json();
+        const data = await response.json().catch(() => ({}));
 
         if (!response.ok || !data.success) {
-          throw new Error(data.message || "Gagal menambahkan menu.");
+          throw new Error(getErrorMessage(data, "Gagal menambahkan menu."));
         }
 
         renderCart(data.cart, data.total);
+
+        showFlashAlert(
+          data.message || "Menu berhasil ditambahkan ke keranjang.",
+          "success",
+        );
       } catch (error) {
-        alert(error.message);
+        showFlashAlert(error.message, "error");
       } finally {
         if (button) {
           button.disabled = false;
@@ -60,15 +111,20 @@ document.addEventListener("DOMContentLoaded", function () {
             body: new FormData(form),
           });
 
-          const data = await response.json();
+          const data = await response.json().catch(() => ({}));
 
           if (!response.ok || !data.success) {
-            throw new Error(data.message || "Gagal menghapus menu.");
+            throw new Error(getErrorMessage(data, "Gagal menghapus menu."));
           }
 
           renderCart(data.cart, data.total);
+
+          showFlashAlert(
+            data.message || "Menu berhasil dihapus dari keranjang.",
+            "success",
+          );
         } catch (error) {
-          alert(error.message);
+          showFlashAlert(error.message, "error");
 
           if (button) {
             button.disabled = false;
@@ -115,15 +171,20 @@ document.addEventListener("DOMContentLoaded", function () {
             body: formData,
           });
 
-          const data = await response.json();
+          const data = await response.json().catch(() => ({}));
 
           if (!response.ok || !data.success) {
-            throw new Error(data.message || "Gagal memperbarui jumlah.");
+            throw new Error(getErrorMessage(data, "Gagal memperbarui jumlah."));
           }
 
           renderCart(data.cart, data.total);
+
+          showFlashAlert(
+            data.message || "Jumlah item berhasil diperbarui.",
+            "success",
+          );
         } catch (error) {
-          alert(error.message);
+          showFlashAlert(error.message, "error");
           button.disabled = false;
         }
       });

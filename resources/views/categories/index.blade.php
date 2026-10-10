@@ -10,10 +10,19 @@
             <h1>Kategori Menu</h1>
 
             {{-- Pesan sukses --}}
-            @if (session('success'))
-                <div class="alert alert-success">
-                    {{ session('success') }}
-                </div>
+            @if (session('success')) <div class="alert alert-success" role="alert">
+            {{ session('success') }} </div>
+            @endif
+            
+            {{-- Pesan error --}}
+            @if (session('error')) <div class="alert alert-error" role="alert">
+            {{ session('error') }} </div>
+            @endif
+            
+            {{-- Pesan validasi --}}
+            @if ($errors->any()) <div class="alert alert-error" role="alert"> <ul>
+            @foreach ($errors->all() as $error) <li>{{ $error }}</li>
+            @endforeach </ul> </div>
             @endif
 
             <a href="{{ route('categories.create') }}" class="btn btn-primary">
